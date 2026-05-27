@@ -1,0 +1,11 @@
+﻿namespace UdemyClone.Domain.Entities
+{
+    public class Instructor
+    {
+        public int InstructorId { get; set; }
+        public string Nombre { get; set; } = null!;
+        public string Email { get; set; } = null!;
+        public DateTime FechaRegistro { get; set; } = DateTime.UtcNow;
+        public ICollection<CursoInstructor> CursoInstructores { get; set; } = [];
+    }
+}
