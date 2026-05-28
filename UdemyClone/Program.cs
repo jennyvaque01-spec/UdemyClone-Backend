@@ -8,13 +8,14 @@ using UdemyClone.Domain.Interfaces;
 using UdemyClone.Infrastructure.Repositories;
 using UdemyClone.WebApi.Middlewares;
 
+var builder = WebApplication.CreateBuilder(args);
 //serilog
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
     .WriteTo.Console()
     .WriteTo.MSSqlServer(
-        connectionString: "Server=192.168.0.100,1433;Database=UdemyClon;User Id=sa;Password=Admin1234@;TrustServerCertificate=True;",
+        connectionString: builder.Configuration["Serilog:ConnectionString"],
         sinkOptions: new Serilog.Sinks.MSSqlServer.MSSqlServerSinkOptions
         {
             TableName = "Logs",
@@ -22,7 +23,6 @@ Log.Logger = new LoggerConfiguration()
         })
     .CreateLogger();
 
-var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
 
 builder.Services.AddDbContext<UdemyCloneContext>(options =>
