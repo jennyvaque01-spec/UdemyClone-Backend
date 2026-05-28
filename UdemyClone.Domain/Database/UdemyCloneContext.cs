@@ -20,7 +20,7 @@ namespace UdemyClone.Domain.Database
         public DbSet<Resena> Resenas { get; set; }
         public DbSet<ListaDeseo> ListaDeseos { get; set; }
         public DbSet<Progreso> Progresos { get; set; }
-
+        public DbSet<Usuario> Usuarios { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
