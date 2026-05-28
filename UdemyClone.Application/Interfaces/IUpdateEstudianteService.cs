@@ -2,7 +2,7 @@
 
 namespace UdemyClone.Application.Interfaces
 {
-    public interface UpdateEstudianteService
+    public interface IUpdateEstudianteService
     {
         Task<bool> CreateEstudianteAsync(CreateEstudianteRequest request);
     }

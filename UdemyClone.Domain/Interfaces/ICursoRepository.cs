@@ -2,7 +2,7 @@
 
 namespace UdemyClone.Domain.Interfaces
 {
-    public interface ICurso
+    public interface ICursoRepository
     {
         Task<List<Curso>> GetAll();
         Task<Curso?> GetById(int id);

@@ -3,7 +3,7 @@ using UdemyClone.Application.Models.Requests.Estudiante;
 
 namespace UdemyClone.Application.Interfaces
 {
-    public interface ILeccionRequest
+    public interface ILeccionService
     {
         Task<List<LeccionDto>> GetBySeccion(int seccionId);
         Task<LeccionDto?> GetById(int id);
