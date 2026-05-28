@@ -1,6 +1,0 @@
-@UdemyClone_HostAddress = http://localhost:5192
-
-GET {{UdemyClone_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
