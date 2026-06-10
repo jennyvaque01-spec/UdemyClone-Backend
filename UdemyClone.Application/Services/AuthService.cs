@@ -11,11 +11,13 @@ using UdemyClone.Domain.Interfaces;
 
 namespace UdemyClone.Application.Services
 {
-    public class AuthService(IUsuarioRepository repo, IConfiguration config) : IAuthService
+    public class AuthService(
+         IUsuarioRepository repo,
+         IConfiguration config,
+         IEmailService emailService) : IAuthService
     {
         public async Task<AuthResponseDto> Register(RegisterRequest model)
         {
-
             if (await repo.ExisteEmail(model.Email))
                 throw new InvalidOperationException("Ya existe un usuario con ese email");
 
@@ -29,6 +31,11 @@ namespace UdemyClone.Application.Services
             };
 
             await repo.Create(usuario);
+
+            // ── Envia el correo de bienvenida 
+            var nombre = model.Email.Split('@')[0];
+            await emailService.SendWelcomeEmailAsync(model.Email, nombre);
+
             return GenerarToken(usuario);
         }
 
@@ -37,9 +44,11 @@ namespace UdemyClone.Application.Services
             var usuario = await repo.GetByEmail(model.Email)
                 ?? throw new KeyNotFoundException("Email o contraseña incorrectos");
 
-
             if (!BCrypt.Net.BCrypt.Verify(model.Password, usuario.PasswordHash))
                 throw new KeyNotFoundException("Email o contraseña incorrectos");
+
+            // ── Enviar notificación de login ────────────────────
+            await emailService.SendLoginNotificationAsync(model.Email);
 
             return GenerarToken(usuario);
         }
@@ -48,19 +57,18 @@ namespace UdemyClone.Application.Services
         {
             var expiracion = DateTime.UtcNow.AddHours(8);
 
-
             var claims = new[]
             {
-                new Claim(ClaimTypes.Email, usuario.Email),
-                new Claim(ClaimTypes.Role, usuario.Rol),
-                new Claim("UsuarioId", usuario.UsuarioId.ToString())
+                new Claim(ClaimTypes.Email,  usuario.Email),
+                new Claim(ClaimTypes.Role,   usuario.Rol),
+                new Claim("UsuarioId",       usuario.UsuarioId.ToString())
             };
-
 
             var key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(config["Jwt:Key"]!));
 
-            var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var credenciales = new SigningCredentials(
+                key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: config["Jwt:Issuer"],

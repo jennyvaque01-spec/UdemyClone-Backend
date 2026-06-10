@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UdemyClone.Domain.Database;
 
@@ -11,9 +12,11 @@ using UdemyClone.Domain.Database;
 namespace UdemyClone.Domain.Migrations
 {
     [DbContext(typeof(UdemyCloneContext))]
-    partial class UdemyCloneContextModelSnapshot : ModelSnapshot
+    [Migration("20260528035808_InicializarEstadoActual")]
+    partial class InicializarEstadoActual
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

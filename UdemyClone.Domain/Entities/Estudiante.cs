@@ -1,5 +1,8 @@
-﻿namespace UdemyClone.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace UdemyClone.Domain.Entities
 {
+    [Table("Estudiantes")]
     public class Estudiante
     {
         public int EstudianteId { get; set; }

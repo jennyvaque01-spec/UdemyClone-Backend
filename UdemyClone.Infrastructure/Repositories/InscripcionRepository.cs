@@ -7,17 +7,30 @@ namespace UdemyClone.Infrastructure.Repositories
 {
     public class InscripcionRepository(UdemyCloneContext context) : IInscripcionRepository
     {
-        public async Task<List<Inscripcion>> GetByEstudiante(int estudianteId)
-            => await context.Inscripciones
+        public async Task<List<Inscripcion>> GetAll()
+        {
+            return await context.Inscripciones
                 .Include(i => i.Estudiante)
                 .Include(i => i.Curso)
-                .Where(i => i.EstudianteId == estudianteId).ToListAsync();
+                .ToListAsync();
+        }
+
+        public async Task<List<Inscripcion>> GetByEstudiante(int estudianteId)
+        {
+            return await context.Inscripciones
+                .Include(i => i.Estudiante)
+                .Include(i => i.Curso)
+                .Where(i => i.EstudianteId == estudianteId)
+                .ToListAsync();
+        }
 
         public async Task<Inscripcion?> GetById(int id)
-            => await context.Inscripciones
+        {
+            return await context.Inscripciones
                 .Include(i => i.Estudiante)
                 .Include(i => i.Curso)
                 .FirstOrDefaultAsync(i => i.InscripcionId == id);
+        }
 
         public async Task<Inscripcion> Create(Inscripcion inscripcion)
         {
@@ -28,16 +41,18 @@ namespace UdemyClone.Infrastructure.Repositories
 
         public async Task<bool> Delete(int id)
         {
-            var insc = await context.Inscripciones.FindAsync(id);
-            if (insc is null) return false;
-            context.Inscripciones.Remove(insc);
+            var inscripcion = await context.Inscripciones.FindAsync(id);
+            if (inscripcion is null) return false;
+
+            context.Inscripciones.Remove(inscripcion);
             await context.SaveChangesAsync();
             return true;
         }
 
         public async Task<bool> YaInscrito(int estudianteId, int cursoId)
-            => await context.Inscripciones
+        {
+            return await context.Inscripciones
                 .AnyAsync(i => i.EstudianteId == estudianteId && i.CursoId == cursoId);
+        }
     }
 }
-

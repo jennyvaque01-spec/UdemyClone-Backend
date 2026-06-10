@@ -8,6 +8,14 @@ namespace UdemyClone.Application.Services
 {
     public class InscripcionService(IInscripcionRepository repo) : IInscripcionService
     {
+
+
+        public async Task<List<InscripcionDto>> GetAll()
+        {
+            var lista = await repo.GetAll();
+            return lista.Select(MapToDto).ToList();
+        }
+
         public async Task<List<InscripcionDto>> GetByEstudiante(int estudianteId)
         {
             var lista = await repo.GetByEstudiante(estudianteId);
@@ -22,7 +30,6 @@ namespace UdemyClone.Application.Services
 
         public async Task<InscripcionDto> Create(CreateInscripcionRequest model)
         {
-
             if (await repo.YaInscrito(model.EstudianteId, model.CursoId))
                 throw new Exception("El estudiante ya está inscrito en este curso");
 

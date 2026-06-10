@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UdemyClone.Application.Interfaces;
 using UdemyClone.Application.Models.Requests.Estudiante;
 
 namespace UdemyClone.WebApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EstudiantesController(IEstudianteService service) : ControllerBase
@@ -44,6 +46,7 @@ namespace UdemyClone.WebApi.Controllers
 
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var eliminado = await service.Delete(id);

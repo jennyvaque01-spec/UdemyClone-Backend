@@ -5,6 +5,7 @@ namespace UdemyClone.Application.Interfaces
 {
     public interface IInscripcionService
     {
+        Task<List<InscripcionDto>> GetAll();
         Task<List<InscripcionDto>> GetByEstudiante(int estudianteId);
         Task<InscripcionDto?> GetById(int id);
         Task<InscripcionDto> Create(CreateInscripcionRequest model);

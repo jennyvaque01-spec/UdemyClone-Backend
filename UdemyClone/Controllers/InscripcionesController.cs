@@ -8,6 +8,13 @@ namespace UdemyClone.WebApi.Controllers
     [ApiController]
     public class InscripcionesController(IInscripcionService service) : ControllerBase
     {
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var resultado = await service.GetAll();
+            return Ok(resultado);
+        }
+
         [HttpGet("estudiante/{estudianteId:int}")]
         public async Task<IActionResult> GetByEstudiante(int estudianteId)
             => Ok(await service.GetByEstudiante(estudianteId));

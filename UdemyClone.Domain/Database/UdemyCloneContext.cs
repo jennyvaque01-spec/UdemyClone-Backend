@@ -24,30 +24,40 @@ namespace UdemyClone.Domain.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            modelBuilder.Entity<Categoria>().ToTable("Categoria");
+            modelBuilder.Entity<Curso>().ToTable("Cursos");
+            modelBuilder.Entity<Instructor>().ToTable("Instructores");
+            modelBuilder.Entity<Estudiante>().ToTable("Estudiantes");
+            modelBuilder.Entity<TipoLeccion>().ToTable("TipoLeccion");
+            modelBuilder.Entity<CursoInstructor>().ToTable("CursoInstructor");
+            modelBuilder.Entity<Seccion>().ToTable("Seccion");
+            modelBuilder.Entity<Leccion>().ToTable("Leccion");
+            modelBuilder.Entity<Inscripcion>().ToTable("Inscripciones");
+            modelBuilder.Entity<Resena>().ToTable("Resenas");
+            modelBuilder.Entity<ListaDeseo>().ToTable("ListaDeseo");
+            modelBuilder.Entity<Progreso>().ToTable("Progreso");
+            modelBuilder.Entity<Usuario>().ToTable("Usuario");
+
+
             modelBuilder.Entity<Categoria>()
                 .HasOne(c => c.CategoriaPadre)
                 .WithMany(c => c.Subcategorias)
                 .HasForeignKey(c => c.CategoriaPadreId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
             modelBuilder.Entity<CursoInstructor>()
                 .HasKey(ci => new { ci.CursoId, ci.InstructorId });
-
 
             modelBuilder.Entity<Inscripcion>()
                 .HasIndex(i => new { i.EstudianteId, i.CursoId })
                 .IsUnique();
 
-
             modelBuilder.Entity<Resena>()
                 .HasKey(r => new { r.EstudianteId, r.CursoId });
-
 
             modelBuilder.Entity<Resena>()
                 .Property(r => r.ResenaTexto)
                 .HasColumnName("Resena");
-
 
             modelBuilder.Entity<ListaDeseo>()
                 .HasKey(l => new { l.CursoId, l.EstudianteId });
@@ -57,14 +67,17 @@ namespace UdemyClone.Domain.Database
 
             modelBuilder.Entity<Instructor>()
                 .HasIndex(i => i.Email).IsUnique();
+
             modelBuilder.Entity<Estudiante>()
                 .HasIndex(e => e.Email).IsUnique();
 
-
             modelBuilder.Entity<Curso>()
-                .Property(c => c.Precio).HasColumnType("decimal(10,2)");
+                .Property(c => c.Precio)
+                .HasPrecision(18, 2);
+
             modelBuilder.Entity<Inscripcion>()
-                .Property(i => i.PrecioPagado).HasColumnType("decimal(10,2)");
+                .Property(i => i.PrecioPagado)
+                .HasPrecision(18, 2);
         }
     }
 }
